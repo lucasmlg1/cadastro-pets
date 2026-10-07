@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: cadastro-pets
+  datasource:
+    url: jdbc:postgresql://localhost:5433/cadastro_pets
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true

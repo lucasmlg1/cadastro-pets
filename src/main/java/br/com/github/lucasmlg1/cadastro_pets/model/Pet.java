@@ -38,8 +38,7 @@ public class Pet {
     @Column(name = "idade")
     private Double idade;
 
-    @CreationTimestamp
-    @Column(name = "data_cadastro")
+    @Column(name = "data_cadastro", insertable = false, updatable = false)
     private LocalDateTime dataCadastro;
 
     // endereco??

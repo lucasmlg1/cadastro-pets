@@ -1,0 +1,10 @@
+CREATE TABLE pet(
+   id UUID PRIMARY KEY ,
+   nome VARCHAR(35) NOT NULL,
+    tipo VARCHAR(10) NOT NULL CHECK (tipo in ('CACHORRO', 'GATO')),
+    sexo VARCHAR(10) NOT NULL CHECK (sexo in ('MACHO', 'FEMEA')),
+    peso NUMERIC(4, 2) NOT NULL CHECK (peso>=0.5 AND peso<=60),
+    raca VARCHAR(35) NOT NULL,
+   idade DECIMAL(4,2) NOT NULL CHECK (idade>=0 AND idade<=20),
+    data_cadastro TIMESTAMP WITHOUT TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
