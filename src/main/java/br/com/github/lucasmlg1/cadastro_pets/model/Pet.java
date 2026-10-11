@@ -2,7 +2,8 @@ package br.com.github.lucasmlg1.cadastro_pets.model;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.Generated;
 import org.hibernate.generator.EventType;
 
@@ -11,7 +12,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Data()
+@Getter
+@Setter
+
 @Table(name = "pet")
 public class Pet {
     @Id
@@ -43,5 +46,8 @@ public class Pet {
     @Column(name = "data_cadastro", insertable = false, updatable = false)
     private LocalDateTime dataCadastro;
 
-    // endereco??
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adotante_id")
+    private Adotante adotante;
+
 }
