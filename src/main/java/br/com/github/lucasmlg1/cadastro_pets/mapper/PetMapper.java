@@ -19,6 +19,15 @@ public class PetMapper {
         return pet;
     }
 
+    public void atualizarEntidade(Pet pet, PetRequestDTO dto) {
+        pet.setNome(dto.nome());
+        pet.setTipoPet(dto.tipoPet());
+        pet.setSexoPet(dto.sexoPet());
+        pet.setPeso(dto.peso());
+        pet.setRaca(dto.raca());
+        pet.setIdade(dto.idade());
+    }
+
      public PetResponseDTO toResponse(Pet pet){
         return new PetResponseDTO(pet.getId(), pet.getNome(),
                 pet.getTipoPet(),

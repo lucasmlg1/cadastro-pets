@@ -3,7 +3,8 @@ package br.com.github.lucasmlg1.cadastro_pets.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.generator.EventType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -38,6 +39,7 @@ public class Pet {
     @Column(name = "idade")
     private Double idade;
 
+    @Generated(event = EventType.INSERT)
     @Column(name = "data_cadastro", insertable = false, updatable = false)
     private LocalDateTime dataCadastro;
 
