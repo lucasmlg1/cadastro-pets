@@ -1,0 +1,1 @@
+ALTER TABLE pet ADD COLUMN adotante_id UUID REFERENCES adotante(id);
