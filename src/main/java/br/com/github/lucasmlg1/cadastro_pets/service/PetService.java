@@ -3,9 +3,13 @@ package br.com.github.lucasmlg1.cadastro_pets.service;
 import br.com.github.lucasmlg1.cadastro_pets.dto.PetFiltroDTO;
 import br.com.github.lucasmlg1.cadastro_pets.dto.PetRequestDTO;
 import br.com.github.lucasmlg1.cadastro_pets.dto.PetResponseDTO;
+import br.com.github.lucasmlg1.cadastro_pets.exception.AdotanteNaoEncontradoException;
+import br.com.github.lucasmlg1.cadastro_pets.exception.PetJaAdotadoException;
 import br.com.github.lucasmlg1.cadastro_pets.exception.PetNaoEncontradoException;
 import br.com.github.lucasmlg1.cadastro_pets.mapper.PetMapper;
+import br.com.github.lucasmlg1.cadastro_pets.model.Adotante;
 import br.com.github.lucasmlg1.cadastro_pets.model.Pet;
+import br.com.github.lucasmlg1.cadastro_pets.repository.AdotanteRepository;
 import br.com.github.lucasmlg1.cadastro_pets.repository.PetRepository;
 import br.com.github.lucasmlg1.cadastro_pets.repository.specification.PetSpecification;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +27,21 @@ public class PetService {
 
     private final PetMapper mapper;
     private final PetRepository repository;
+    private final AdotanteRepository adotanteRepository;
 
 
+
+    @Transactional
+    public PetResponseDTO adotar(UUID petId, UUID adotanteId) {
+        Pet pet = buscarOuFalhar(petId);
+        if (pet.getAdotante() != null) {
+            throw new PetJaAdotadoException(petId);
+        }
+        Adotante adotante = adotanteRepository.findById(adotanteId)
+                .orElseThrow(() -> new AdotanteNaoEncontradoException(adotanteId));
+        pet.setAdotante(adotante);
+        return mapper.toResponse(pet);
+    }
 
     @Transactional(readOnly = true)
     public Page<PetResponseDTO> listar(PetFiltroDTO f, Pageable pageable) {

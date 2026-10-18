@@ -37,6 +37,11 @@ public class PetController {
         return ResponseEntity.ok(service.listar(filtro, pageable));
     }
 
+    @PutMapping("/{id}/adotante/{adotanteId}")
+    public ResponseEntity<PetResponseDTO> adotar(@PathVariable UUID id, @PathVariable UUID adotanteId) {
+        return ResponseEntity.ok(service.adotar(id, adotanteId));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<PetResponseDTO> obterDetalhes(@PathVariable UUID id) {

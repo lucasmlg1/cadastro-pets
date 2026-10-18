@@ -70,7 +70,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErroResposta handleViolacaoDados(DataIntegrityViolationException e){
-        return ErroResposta.respostaConflito("Violação de integridade dos dados " + e.getMessage());
+        log.warn("Violação de integridade de dados", e);
+        return ErroResposta.respostaConflito("Violação de integridade de dados!");
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -84,13 +85,29 @@ public class GlobalExceptionHandler {
     public ErroResposta handleRotaInexistente(NoResourceFoundException e) {
         return new ErroResposta(404, "Recurso não encontrado", List.of());
     }
-
+    @ExceptionHandler(PetJaAdotadoException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErroResposta handlePetJaAdotado(PetJaAdotadoException e) {
+        return ErroResposta.respostaConflito(e.getMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErroResposta handleErroInterno(Exception e) {
         log.error("Erro inesperado", e);
         return new ErroResposta(500, "Erro interno do servidor", List.of());
+    }
+
+    @ExceptionHandler(CepNaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+    public ErroResposta handleCepNaoEncontrado(CepNaoEncontradoException e) {
+        return new ErroResposta(422, e.getMessage(), List.of());
+    }
+
+    @ExceptionHandler(CepServicoIndisponivelException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+    public ErroResposta handleCepIndisponivel(CepServicoIndisponivelException e) {
+        return new ErroResposta(503, e.getMessage(), List.of());
     }
 
     @ExceptionHandler(PetNaoEncontradoException.class)
