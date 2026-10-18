@@ -5,10 +5,11 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record EnderecoDTO(
-        @NotBlank @Pattern(regexp = "\\d{8}", message = "O CEP deve ter 8 dígitos, sem hífen") String cep,
-        @NotBlank @Size(max = 100) String logradouro,
-        @NotBlank @Size(max = 10) String numero,
-        @NotBlank @Size(max = 60) String bairro,
-        @NotBlank @Size(max = 60) String cidade,
-        @NotBlank @Pattern(regexp = "[A-Za-z]{2}", message = "A UF deve ter 2 letras") String uf) {
+        @NotBlank(message = "O CEP é obrigatório")
+        @Pattern(regexp = "\\d{8}", message = "O CEP deve ter 8 dígitos, sem hífen")
+        String cep,
+
+        @NotBlank(message = "O número é obrigatório")
+        @Size(max = 10, message = "O número deve ter no máximo 10 caracteres")
+        String numero) {
 }
