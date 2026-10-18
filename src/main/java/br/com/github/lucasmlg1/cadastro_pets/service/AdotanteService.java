@@ -2,11 +2,14 @@ package br.com.github.lucasmlg1.cadastro_pets.service;
 
 import br.com.github.lucasmlg1.cadastro_pets.dto.AdotanteCadastroDTO;
 import br.com.github.lucasmlg1.cadastro_pets.dto.AdotanteResponseDTO;
+import br.com.github.lucasmlg1.cadastro_pets.dto.ViaCepResponse;
 import br.com.github.lucasmlg1.cadastro_pets.exception.*;
 import br.com.github.lucasmlg1.cadastro_pets.mapper.AdotanteMapper;
 import br.com.github.lucasmlg1.cadastro_pets.model.Adotante;
 import br.com.github.lucasmlg1.cadastro_pets.repository.AdotanteRepository;
 import br.com.github.lucasmlg1.cadastro_pets.repository.PetRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class AdotanteService {
     private final AdotanteRepository repository;
     private final AdotanteMapper mapper;
     private final PetRepository petRepository;
+    private final CepService cepService;
 
     @Transactional
     public void deletar(UUID id){
@@ -30,6 +34,11 @@ public class AdotanteService {
         repository.delete(adotante);
     }
 
+    @Transactional(readOnly = true)
+    public Page<AdotanteResponseDTO> listar(Pageable pageable) {
+        return repository.findAll(pageable).map(mapper::toResponse);
+    }
+
     @Transactional
     public AdotanteResponseDTO atualizar(UUID id, AdotanteCadastroDTO dto) {
         Adotante adotante = buscarOuFalhar(id);
@@ -37,7 +46,8 @@ public class AdotanteService {
         if (!novoEmail.equals(adotante.getEmail()) && repository.existsByEmail(novoEmail)) {
             throw new EmailJaCadastradoException(novoEmail);
         }
-        mapper.atualizarEntidade(adotante, dto);
+        ViaCepResponse via = cepService.consultar(dto.endereco().cep());
+        mapper.atualizarEntidade(adotante, dto, via);
         adotante.setEmail(novoEmail);
         return mapper.toResponse(adotante);
     }
@@ -58,7 +68,8 @@ public class AdotanteService {
         if (repository.existsByEmail(email)) {
             throw new EmailJaCadastradoException(email);
         }
-        Adotante adotante = mapper.toEntity(dto);
+        ViaCepResponse via = cepService.consultar(dto.endereco().cep());
+        Adotante adotante = mapper.toEntity(dto, via);
         adotante.setEmail(email);
         return mapper.toResponse(repository.saveAndFlush(adotante));
     }

@@ -5,6 +5,9 @@ import br.com.github.lucasmlg1.cadastro_pets.dto.AdotanteResponseDTO;
 import br.com.github.lucasmlg1.cadastro_pets.service.AdotanteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +34,12 @@ public class AdotanteController {
     @GetMapping("/{id}")
     public ResponseEntity<AdotanteResponseDTO> getAdotante(@PathVariable UUID id){
         return ResponseEntity.ok(service.getAdotante(id));
+    }
+
+    @GetMapping
+    public ResponseEntity<Page<AdotanteResponseDTO>> listar(
+            @PageableDefault(size = 10, sort = "nome") Pageable pageable) {
+        return ResponseEntity.ok(service.listar(pageable));
     }
 
     @DeleteMapping("/{id}")
