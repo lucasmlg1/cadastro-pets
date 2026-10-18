@@ -1,0 +1,4 @@
+INSERT INTO adotante (id, nome, email, telefone, endereco_id) VALUES
+('b1111111-1111-4111-8111-111111111111', 'testAdotante1', 'testadotante1@teste.com', '83999990001', 'a1111111-1111-4111-8111-111111111111'),
+('b2222222-2222-4222-8222-222222222222', 'testAdotante2', 'testadotante2@teste.com', '83999990002', 'a2222222-2222-4222-8222-222222222222'),
+('b3333333-3333-4333-8333-333333333333', 'testAdotante3', 'testadotante3@teste.com', '83999990003', 'a3333333-3333-4333-8333-333333333333');
